@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { productRepository, storeRepository, purchaseRepository, saleRepository, productLocateRepository } from '@/data';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { SalesChart } from '@/components/dashboard/SalesChart';
 import { PartnerLeaderboard } from '@/components/dashboard/PartnerLeaderboard';
 import { RevenueChart } from '@/components/dashboard/RevenueChart';
+import { InventoryPieChart } from '@/components/dashboard/InventoryPieChart';
+import { TrendLineChart } from '@/components/dashboard/TrendLineChart';
+import { CategoryDonutChart } from '@/components/dashboard/CategoryDonutChart';
+import { PerformanceRadarChart } from '@/components/dashboard/PerformanceRadarChart';
 
 interface DashboardStats {
   totalProducts: number;
@@ -58,6 +63,43 @@ export default function Dashboard() {
     { id: '6', name: 'Smart Solutions', sales: 61400, growth: 9.2, rank: 6 },
     { id: '7', name: 'NextGen Corp', sales: 55300, growth: 3.4, rank: 7 },
     { id: '8', name: 'Apex Partners', sales: 48700, growth: -1.1, rank: 8 },
+  ];
+
+  // Inventory distribution data
+  const inventoryData = [
+    { category: 'In Stock', value: 245, percentage: 68 },
+    { category: 'Low Stock', value: 67, percentage: 19 },
+    { category: 'Out of Stock', value: 32, percentage: 9 },
+    { category: 'Discontinued', value: 16, percentage: 4 },
+  ];
+
+  // Trend data for line chart
+  const trendData = [
+    { date: 'Jan 1', orders: 45, customers: 12, revenue: 4500 },
+    { date: 'Jan 8', orders: 52, customers: 18, revenue: 5200 },
+    { date: 'Jan 15', orders: 38, customers: 9, revenue: 3800 },
+    { date: 'Jan 22', orders: 67, customers: 24, revenue: 6700 },
+    { date: 'Jan 29', orders: 71, customers: 21, revenue: 7100 },
+    { date: 'Feb 5', orders: 59, customers: 16, revenue: 5900 },
+    { date: 'Feb 12', orders: 84, customers: 31, revenue: 8400 },
+  ];
+
+  // Category sales data
+  const categoryData = [
+    { name: 'Electronics', value: 45000, sales: 156, color: 'hsl(var(--primary))' },
+    { name: 'Clothing', value: 32000, sales: 124, color: 'hsl(var(--primary-hover))' },
+    { name: 'Books', value: 18000, sales: 89, color: 'hsl(var(--accent))' },
+    { name: 'Accessories', value: 12000, sales: 67, color: 'hsl(var(--muted))' },
+  ];
+
+  // Performance radar data
+  const performanceData = [
+    { metric: 'Sales', current: 85, target: 90, fullMark: 100 },
+    { metric: 'Quality', current: 92, target: 85, fullMark: 100 },
+    { metric: 'Delivery', current: 78, target: 80, fullMark: 100 },
+    { metric: 'Support', current: 95, target: 90, fullMark: 100 },
+    { metric: 'Growth', current: 73, target: 75, fullMark: 100 },
+    { metric: 'Retention', current: 88, target: 85, fullMark: 100 },
   ];
 
   useEffect(() => {
@@ -186,6 +228,81 @@ export default function Dashboard() {
           <SalesChart data={salesData} />
         </div>
         <RevenueChart data={revenueData} />
+      </div>
+
+      {/* Additional Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+        <div className="lg:col-span-1">
+          <InventoryPieChart data={inventoryData} />
+        </div>
+        <div className="lg:col-span-1">
+          <CategoryDonutChart data={categoryData} />
+        </div>
+        <div className="xl:col-span-2">
+          <TrendLineChart data={trendData} />
+        </div>
+      </div>
+
+      {/* Performance and Advanced Charts */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+        <PerformanceRadarChart data={performanceData} />
+        
+        {/* Advanced Metrics Card */}
+        <Card className="animate-fade-in">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">Advanced Metrics</CardTitle>
+            <p className="text-sm text-muted-foreground">Real-time business insights</p>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Customer Lifetime Value */}
+            <div className="p-4 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Customer Lifetime Value</span>
+                <span className="text-lg font-bold text-primary">$2,450</span>
+              </div>
+              <div className="w-full bg-primary/20 rounded-full h-2">
+                <div className="bg-primary h-2 rounded-full w-3/4 animate-[expand_1s_ease-out]"></div>
+              </div>
+              <span className="text-xs text-muted-foreground mt-1 block">+12% from last quarter</span>
+            </div>
+
+            {/* Churn Rate */}
+            <div className="p-4 rounded-lg bg-gradient-to-r from-warning/10 to-warning/5 border border-warning/20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Churn Rate</span>
+                <span className="text-lg font-bold text-warning">3.2%</span>
+              </div>
+              <div className="w-full bg-warning/20 rounded-full h-2">
+                <div className="bg-warning h-2 rounded-full w-1/4 animate-[expand_1s_ease-out_0.5s]"></div>
+              </div>
+              <span className="text-xs text-muted-foreground mt-1 block">-0.8% from last quarter</span>
+            </div>
+
+            {/* Market Share */}
+            <div className="p-4 rounded-lg bg-gradient-to-r from-success/10 to-success/5 border border-success/20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Market Share</span>
+                <span className="text-lg font-bold text-success">18.7%</span>
+              </div>
+              <div className="w-full bg-success/20 rounded-full h-2">
+                <div className="bg-success h-2 rounded-full w-4/5 animate-[expand_1s_ease-out_1s]"></div>
+              </div>
+              <span className="text-xs text-muted-foreground mt-1 block">+2.3% from last quarter</span>
+            </div>
+
+            {/* Profit Margin */}
+            <div className="p-4 rounded-lg bg-gradient-to-r from-accent/10 to-accent/5 border border-accent/20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Profit Margin</span>
+                <span className="text-lg font-bold text-accent">24.5%</span>
+              </div>
+              <div className="w-full bg-accent/20 rounded-full h-2">
+                <div className="bg-accent h-2 rounded-full w-2/3 animate-[expand_1s_ease-out_1.5s]"></div>
+              </div>
+              <span className="text-xs text-muted-foreground mt-1 block">+1.2% from last quarter</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Partner Leaderboard and Quick Actions */}
