@@ -1,44 +1,29 @@
 import { NavLink } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  MapPin, 
-  Truck, 
-  Store, 
-  Users, 
-  Package, 
-  ShoppingCart, 
-  TrendingUp, 
-  ArrowRightLeft,
-  Gift,
-  Search,
-  ChevronDown,
-  X
-} from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 const navigationItems = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Dashboard', href: '/' },
   {
     name: 'Management',
-    icon: MapPin,
     children: [
       { name: 'Regional', href: '/management/regional' },
       { name: 'Territory', href: '/management/territory' },
       { name: 'Area', href: '/management/area' },
     ]
   },
-  { name: 'Suppliers', href: '/suppliers', icon: Truck },
-  { name: 'Stores', href: '/stores', icon: Store },
-  { name: 'Customers', href: '/customers', icon: Users },
-  { name: 'Products', href: '/products', icon: Package },
-  { name: 'Purchases', href: '/purchases', icon: ShoppingCart },
-  { name: 'Sales', href: '/sales', icon: TrendingUp },
-  { name: 'Stock Transfers', href: '/stock-transfers', icon: ArrowRightLeft },
-  { name: 'Rewards', href: '/rewards', icon: Gift },
-  { name: 'Product Locate', href: '/product-locate', icon: Search },
+  { name: 'Suppliers', href: '/suppliers' },
+  { name: 'Stores', href: '/stores' },
+  { name: 'Customers', href: '/customers' },
+  { name: 'Products', href: '/products' },
+  { name: 'Purchases', href: '/purchases' },
+  { name: 'Sales', href: '/sales' },
+  { name: 'Stock Transfers', href: '/stock-transfers' },
+  { name: 'Rewards', href: '/rewards' },
+  { name: 'Product Locate', href: '/product-locate' },
 ];
 
 export function Sidebar() {
@@ -83,10 +68,9 @@ export function Sidebar() {
                     sidebarCollapsed && "justify-center"
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
                   {!sidebarCollapsed && (
                     <>
-                      <span className="ml-3">{item.name}</span>
+                      <span className="font-medium">{item.name}</span>
                       <ChevronDown 
                         className={cn(
                           "h-4 w-4 ml-auto transition-transform",
@@ -94,6 +78,9 @@ export function Sidebar() {
                         )} 
                       />
                     </>
+                  )}
+                  {sidebarCollapsed && (
+                    <span className="text-xs font-medium">{item.name.slice(0, 3)}</span>
                   )}
                 </Button>
                 
@@ -137,8 +124,8 @@ export function Sidebar() {
                 )
               }
             >
-              <item.icon className="h-5 w-5" />
-              {!sidebarCollapsed && <span className="ml-3">{item.name}</span>}
+              {!sidebarCollapsed && <span className="font-medium">{item.name}</span>}
+              {sidebarCollapsed && <span className="text-xs font-medium">{item.name.slice(0, 3)}</span>}
             </NavLink>
           );
         })}

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, Store, ShoppingCart, TrendingUp, Gift, Users } from 'lucide-react';
 import { productRepository, storeRepository, purchaseRepository, saleRepository, productLocateRepository } from '@/data';
+import { StatsCard } from '@/components/dashboard/StatsCard';
+import { SalesChart } from '@/components/dashboard/SalesChart';
+import { PartnerLeaderboard } from '@/components/dashboard/PartnerLeaderboard';
+import { RevenueChart } from '@/components/dashboard/RevenueChart';
 
 interface DashboardStats {
   totalProducts: number;
@@ -11,6 +13,9 @@ interface DashboardStats {
   recentPurchases: number;
   recentSales: number;
   pendingRewards: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  conversionRate: number;
 }
 
 export default function Dashboard() {
@@ -21,8 +26,39 @@ export default function Dashboard() {
     recentPurchases: 0,
     recentSales: 0,
     pendingRewards: 0,
+    totalRevenue: 0,
+    averageOrderValue: 0,
+    conversionRate: 0,
   });
   const [loading, setLoading] = useState(true);
+
+  // Mock data for charts
+  const salesData = [
+    { month: 'Jan', sales: 4000, purchases: 2400 },
+    { month: 'Feb', sales: 3000, purchases: 1398 },
+    { month: 'Mar', sales: 2000, purchases: 9800 },
+    { month: 'Apr', sales: 2780, purchases: 3908 },
+    { month: 'May', sales: 1890, purchases: 4800 },
+    { month: 'Jun', sales: 2390, purchases: 3800 },
+  ];
+
+  const revenueData = [
+    { category: 'Products', revenue: 12000, target: 15000 },
+    { category: 'Services', revenue: 8500, target: 10000 },
+    { category: 'Subscriptions', revenue: 5200, target: 6000 },
+    { category: 'Accessories', revenue: 3100, target: 4000 },
+  ];
+
+  const partnersData = [
+    { id: '1', name: 'TechCorp Solutions', sales: 125000, growth: 15.2, rank: 1 },
+    { id: '2', name: 'Global Industries', sales: 98000, growth: 8.7, rank: 2 },
+    { id: '3', name: 'Innovation Labs', sales: 87500, growth: 12.1, rank: 3 },
+    { id: '4', name: 'Digital Dynamics', sales: 76200, growth: -2.3, rank: 4 },
+    { id: '5', name: 'Future Systems', sales: 68900, growth: 5.8, rank: 5 },
+    { id: '6', name: 'Smart Solutions', sales: 61400, growth: 9.2, rank: 6 },
+    { id: '7', name: 'NextGen Corp', sales: 55300, growth: 3.4, rank: 7 },
+    { id: '8', name: 'Apex Partners', sales: 48700, growth: -1.1, rank: 8 },
+  ];
 
   useEffect(() => {
     loadStats();
@@ -61,6 +97,11 @@ export default function Dashboard() {
         filters: { rewardStatus: false }
       });
       const pendingRewards = productLocate.total;
+
+      // Calculate additional metrics
+      const totalRevenue = sales.data.reduce((sum, sale) => sum + (sale.total || 0), 0);
+      const averageOrderValue = recentSales > 0 ? totalRevenue / recentSales : 0;
+      const conversionRate = totalProducts > 0 ? (recentSales / totalProducts) * 100 : 0;
       
       setStats({
         totalProducts,
@@ -69,6 +110,9 @@ export default function Dashboard() {
         recentPurchases,
         recentSales,
         pendingRewards,
+        totalRevenue,
+        averageOrderValue,
+        conversionRate,
       });
     } catch (error) {
       console.error('Failed to load dashboard stats:', error);
@@ -77,128 +121,150 @@ export default function Dashboard() {
     }
   };
 
-  const statCards = [
-    {
-      title: 'Total Products',
-      value: stats.totalProducts.toLocaleString(),
-      icon: Package,
-      color: 'text-blue-600',
-    },
-    {
-      title: 'In Stock',
-      value: stats.inStock.toLocaleString(),
-      icon: Package,
-      color: 'text-green-600',
-    },
-    {
-      title: 'Total Stores',
-      value: stats.totalStores.toLocaleString(),
-      icon: Store,
-      color: 'text-purple-600',
-    },
-    {
-      title: 'Purchases (30d)',
-      value: stats.recentPurchases.toLocaleString(),
-      icon: ShoppingCart,
-      color: 'text-orange-600',
-    },
-    {
-      title: 'Sales (30d)',
-      value: stats.recentSales.toLocaleString(),
-      icon: TrendingUp,
-      color: 'text-green-600',
-    },
-    {
-      title: 'Pending Rewards',
-      value: stats.pendingRewards.toLocaleString(),
-      icon: Gift,
-      color: 'text-red-600',
-    },
-  ];
-
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
       <PageHeader
-        title="Dashboard"
-        description="Overview of your admin panel"
+        title="Analytics Dashboard"
+        description="Real-time insights and performance metrics"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {statCards.map((card, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-              <card.icon className={`h-5 w-5 ${card.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {loading ? '...' : card.value}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      {/* Main Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
+        <StatsCard
+          title="Total Products"
+          value={stats.totalProducts.toLocaleString()}
+          change="+12% from last month"
+          changeType="positive"
+          loading={loading}
+          className="lg:col-span-1"
+        />
+        <StatsCard
+          title="In Stock"
+          value={stats.inStock.toLocaleString()}
+          change="+8% from last month" 
+          changeType="positive"
+          loading={loading}
+          className="lg:col-span-1"
+        />
+        <StatsCard
+          title="Total Stores"
+          value={stats.totalStores.toLocaleString()}
+          change="No change"
+          changeType="neutral"
+          loading={loading}
+          className="lg:col-span-1"
+        />
+        <StatsCard
+          title="Revenue (30d)"
+          value={`$${(stats.totalRevenue / 1000).toFixed(1)}K`}
+          change="+15% from last month"
+          changeType="positive"
+          loading={loading}
+          className="lg:col-span-1"
+        />
+        <StatsCard
+          title="Avg Order Value"
+          value={`$${stats.averageOrderValue.toFixed(0)}`}
+          change="+5% from last month"
+          changeType="positive"
+          loading={loading}
+          className="lg:col-span-1"
+        />
+        <StatsCard
+          title="Conversion Rate"
+          value={`${stats.conversionRate.toFixed(1)}%`}
+          change="-2% from last month"
+          changeType="negative"
+          loading={loading}
+          className="lg:col-span-1"
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <a
-              href="/products"
-              className="block p-3 rounded-lg border hover:bg-muted/50 transition-colors"
-            >
-              <div className="font-medium">Manage Products</div>
-              <div className="text-sm text-muted-foreground">Add, edit, or view products</div>
-            </a>
-            <a
-              href="/purchases"
-              className="block p-3 rounded-lg border hover:bg-muted/50 transition-colors"
-            >
-              <div className="font-medium">Record Purchase</div>
-              <div className="text-sm text-muted-foreground">Add new product purchases</div>
-            </a>
-            <a
-              href="/sales"
-              className="block p-3 rounded-lg border hover:bg-muted/50 transition-colors"
-            >
-              <div className="font-medium">Record Sale</div>
-              <div className="text-sm text-muted-foreground">Process product sales</div>
-            </a>
-            <a
-              href="/rewards"
-              className="block p-3 rounded-lg border hover:bg-muted/50 transition-colors"
-            >
-              <div className="font-medium">Generate Rewards</div>
-              <div className="text-sm text-muted-foreground">Process reward assignments</div>
-            </a>
-          </CardContent>
-        </Card>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+        <div className="xl:col-span-2">
+          <SalesChart data={salesData} />
+        </div>
+        <RevenueChart data={revenueData} />
+      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>System Status</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Data Storage</span>
-              <span className="text-sm text-green-600 font-medium">Active</span>
+      {/* Partner Leaderboard and Quick Actions */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2">
+          <PartnerLeaderboard partners={partnersData} loading={loading} />
+        </div>
+        
+        {/* Quick Actions */}
+        <div className="space-y-6">
+          <div className="bg-card rounded-lg border p-6 animate-fade-in">
+            <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+            <div className="space-y-3">
+              <a
+                href="/products"
+                className="block p-4 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all duration-300 group"
+              >
+                <div className="font-medium group-hover:text-primary transition-colors">Manage Products</div>
+                <div className="text-sm text-muted-foreground">Add, edit, or view products</div>
+              </a>
+              <a
+                href="/purchases"
+                className="block p-4 rounded-lg bg-muted/50 border hover:bg-muted transition-all duration-300 group"
+              >
+                <div className="font-medium group-hover:text-primary transition-colors">Record Purchase</div>
+                <div className="text-sm text-muted-foreground">Add new product purchases</div>
+              </a>
+              <a
+                href="/sales"
+                className="block p-4 rounded-lg bg-muted/50 border hover:bg-muted transition-all duration-300 group"
+              >
+                <div className="font-medium group-hover:text-primary transition-colors">Record Sale</div>
+                <div className="text-sm text-muted-foreground">Process product sales</div>
+              </a>
+              <a
+                href="/rewards"
+                className="block p-4 rounded-lg bg-muted/50 border hover:bg-muted transition-all duration-300 group"
+              >
+                <div className="font-medium group-hover:text-primary transition-colors">Generate Rewards</div>
+                <div className="text-sm text-muted-foreground">Process reward assignments</div>
+              </a>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Mock Repository</span>
-              <span className="text-sm text-green-600 font-medium">Connected</span>
+          </div>
+
+          {/* System Health */}
+          <div className="bg-card rounded-lg border p-6 animate-fade-in">
+            <h3 className="text-lg font-semibold mb-4">System Health</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Data Storage</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-success rounded-full"></div>
+                  <span className="text-sm font-medium text-success">Active</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">API Services</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-success rounded-full"></div>
+                  <span className="text-sm font-medium text-success">Connected</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Cache Status</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-warning rounded-full"></div>
+                  <span className="text-sm font-medium text-warning">Optimizing</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Security</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-success rounded-full"></div>
+                  <span className="text-sm font-medium text-success">Secure</span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">UI State</span>
-              <span className="text-sm text-green-600 font-medium">Loaded</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Local Storage</span>
-              <span className="text-sm text-green-600 font-medium">Available</span>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

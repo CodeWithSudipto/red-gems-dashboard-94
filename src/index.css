@@ -15,11 +15,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Admin Panel Primary - #C8102E */
-    --primary: 348 88% 43%;
+    /* Admin Panel Primary - #89001b */
+    --primary: 351 100% 27%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 348 88% 38%;
-    --primary-light: 348 88% 95%;
+    --primary-hover: 351 100% 22%;
+    --primary-light: 351 100% 95%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -35,23 +35,23 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 348 88% 43%;
+    --ring: 351 100% 27%;
 
     --radius: 0.75rem;
 
     /* Admin Sidebar - Using Primary Color */
-    --sidebar-background: 348 88% 43%;
+    --sidebar-background: 351 100% 27%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 348 88% 43%;
-    --sidebar-accent: 348 88% 38%;
+    --sidebar-primary-foreground: 351 100% 27%;
+    --sidebar-accent: 351 100% 22%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 348 88% 48%;
-    --sidebar-ring: 348 88% 60%;
+    --sidebar-border: 351 100% 32%;
+    --sidebar-ring: 351 100% 40%;
 
     /* Admin Specific Colors */
-    --admin-header: 348 88% 43%;
-    --admin-nav-active: 348 88% 48%;
+    --admin-header: 351 100% 27%;
+    --admin-nav-active: 351 100% 32%;
     --admin-surface: 0 0% 99%;
     --admin-border-light: 220 13% 91%;
     
