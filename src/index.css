@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Admin Panel Design System - Primary Color: #C8102E */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Admin Panel Primary - #C8102E */
+    --primary: 348 88% 43%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 348 88% 38%;
+    --primary-light: 348 88% 95%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 348 88% 43%;
+
+    --radius: 0.75rem;
+
+    /* Admin Sidebar - Using Primary Color */
+    --sidebar-background: 348 88% 43%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 348 88% 43%;
+    --sidebar-accent: 348 88% 38%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 348 88% 48%;
+    --sidebar-ring: 348 88% 60%;
+
+    /* Admin Specific Colors */
+    --admin-header: 348 88% 43%;
+    --admin-nav-active: 348 88% 48%;
+    --admin-surface: 0 0% 99%;
+    --admin-border-light: 220 13% 91%;
+    
+    /* Status Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-admin-surface text-foreground font-[system-ui,sans-serif];
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  .admin-surface {
+    @apply bg-[hsl(var(--admin-surface))];
+  }
+  
+  .admin-header {
+    @apply bg-[hsl(var(--admin-header))] text-white;
+  }
+  
+  .admin-nav-active {
+    @apply bg-[hsl(var(--admin-nav-active))];
+  }
+  
+  .status-success {
+    @apply bg-[hsl(var(--success))] text-[hsl(var(--success-foreground))];
+  }
+  
+  .status-warning {
+    @apply bg-[hsl(var(--warning))] text-[hsl(var(--warning-foreground))];
+  }
+  
+  .status-info {
+    @apply bg-[hsl(var(--info))] text-[hsl(var(--info-foreground))];
+  }
+}
